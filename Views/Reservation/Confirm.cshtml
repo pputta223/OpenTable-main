@@ -1,0 +1,41 @@
+@model List<OpenTable.Models.DomainModels.Reservation>
+
+@{
+    ViewData["Title"] = "Confirm Reservations";
+}
+
+<h2>Are you sure you want to make the below reservation?</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Your cart is empty.</div>
+}
+else
+{
+    <form asp-action="Reserve" method="post">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Restaurant</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Party Size</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Restaurant?.Name</td>
+                    <td>@r.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@r.TimeSlot</td>
+                    <td>@r.PartySize</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-success">Confirm Reservations</button>
+        <a asp-action="Index" asp-controller="Cart" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+}

@@ -1,0 +1,29 @@
+@model List<OpenTable.Models.DomainModels.Reservation>
+
+@{
+ViewBag.Title = "All Reservations";
+}
+
+<h1>All Reservations</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Restaurant</th>
+        <th>Date</th>
+        <th>Time Slot</th>
+        <th>Party Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var reservation in Model)
+    {
+    <tr>
+        <td>@reservation.Restaurant?.Name</td>
+        <td>@reservation.Date.ToString("yyyy-MM-dd")</td>
+        <td>@reservation.TimeSlot</td>
+        <td>@reservation.PartySize</td>
+    </tr>
+    }
+    </tbody>
+</table>

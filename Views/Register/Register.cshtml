@@ -1,0 +1,56 @@
+﻿@model OpenTable.Models.DomainModels.AppUser
+@{
+    ViewBag.Title = "Account Registration";
+}
+
+@section scripts {
+<script src="~/js/maximum-age.js"></script>
+<script src="~/js/dob-not-future-age.js"></script>
+}
+
+<h1>Account Registration</h1>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Register" method="post">
+    <div class="row mb-2">
+        <label asp-for="FullName" class="col-form-label col-md-2"></label>
+        <div class="col-md-4">
+            <input asp-for="FullName" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label asp-for="Email" class="col-form-label col-md-2"></label>
+        <div class="col-md-4">
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label asp-for="DOB" class="col-form-label col-md-2"></label>
+        <div class="col-md-4">
+            <input asp-for="DOB" class="form-control" type="text" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="DOB" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label asp-for="Phone" class="col-form-label col-md-2"></label>
+        <div class="col-md-4">
+            <input asp-for="Phone" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="offset-md-2 col">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+</form>

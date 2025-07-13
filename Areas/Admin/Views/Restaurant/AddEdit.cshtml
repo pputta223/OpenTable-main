@@ -1,0 +1,78 @@
+@model OpenTable.Models.DomainModels.Restaurant
+
+
+@{
+    ViewData["Title"] = $"{ViewBag.Operation} restaurant";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="AddEdit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label asp-for="CuisineId"></label>
+        <select asp-for="CuisineId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Cuisines, "CuisineId", "Name"))">
+            <option value=""></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PriceId"></label>
+        <select asp-for="PriceId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Prices, "PriceId", "Name"))">
+            <option value=""></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OpenHours"></label>
+        <input asp-for="OpenHours" class="form-control" />
+    </div>
+
+    
+    <div class="form-group">
+        <label asp-for="MetropolisId"></label>
+        <select asp-for="MetropolisId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Metropolises, "Id", "Name"))">
+            <option value=""></option>
+        </select>
+    </div>
+    @* <input type="hidden" asp-for="LogoPath" /> *@
+
+    <!-- Logo Image Upload -->
+    <div class="form-group">
+        <label>Upload Logo Image</label>
+        <input type="file" name="LogoFile" class="form-control" />
+        @if (!string.IsNullOrEmpty(Model.LogoPath))
+        {
+        <div>
+            <img src="~/@Model.LogoPath?v=@DateTime.Now.Ticks" alt="Logo" width="50" />
+        </div>
+        }
+    </div>
+
+
+    <br />
+    <button type="submit" class="btn btn-primary">
+       Save
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

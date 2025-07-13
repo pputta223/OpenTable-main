@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OpenTable.Models
+@inject SignInManager<OpenTable.Models.DomainModels.User> signInManager
+@{
+    Layout = "_Layout";
+}
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-light text-dark bg-secondary fixed-top">
+        <div class="container-fluid">
+            <img src="/images/logo.png" alt="Company Logo" height="60">
+            <nav class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav ms-auto">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <span class="text-danger">@User.Identity?.Name</span>
+                        <form method="post" asp-action="LogOut" asp-controller="Account"
+                              asp-area="">
+                            <a class="nav-link text-dark fs-5 fw-bold">
+                                <input type="submit" value="Log Out" />
+                            </a>
+                        </form>
+
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark fs-5 fw-bold" asp-action="Login" asp-controller="Account"
+                           asp-area="">Log In</a>
+                    }
+                    <a class="nav-link text-dark fs-5 fw-bold"
+                      asp-area="" asp-controller="Home" asp-action="Index">Site</a>
+                </div>
+            </nav>
+        </div>
+    </nav>
+</header>
+<main>
+    @if (TempData["Message"] != null)
+    {
+    <div class="alert alert-success text-center mt-2">
+        @TempData["Message"]
+    </div>
+}@if (TempData["ErrorMessage"] != null)
+    {
+    <div class="alert alert-danger text-center mt-2">
+        @TempData["ErrorMessage"]
+    </div>
+    }
+    @RenderBody()
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</main>
+
+@section scripts{
+    @RenderSection("scripts", required:false)
+}

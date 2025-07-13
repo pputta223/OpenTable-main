@@ -1,0 +1,31 @@
+@model IEnumerable<OpenTable.Models.DomainModels.Metropolis>
+@{
+    ViewData["Title"] = "Metropolises";
+}
+
+<a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-link text-muted small"> ← Back to Admin Menu </a>
+
+<h2>Metropolises</h2>
+
+<p><a asp-action="Add" class="btn btn-primary">Add New Metropolis</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

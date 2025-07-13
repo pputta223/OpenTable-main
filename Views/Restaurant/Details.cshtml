@@ -1,0 +1,78 @@
+@model OpenTable.Models.ViewModels.RestaurantsViewModel
+@{
+    ViewBag.Title = "Restaurant Details";
+}
+
+<h1>Restaurant Details</h1>
+<div class="row">
+    <div class="col-sm-8">
+        <h2>@Model.Restaurant.Name</h2>
+        <img src="~/@Model.Restaurant.LogoPath?v=@DateTime.Now.Ticks" alt="Logo" class="img-responsive center-block"/>
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>Metropolis:</td>
+                <td>@Model.Restaurant.Metropolis?.Name</td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td>@Model.Restaurant.Address</td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td>@Model.Restaurant.Phone</td>
+            </tr>
+            <tr>
+                <td>Price Range:</td>
+                <td>@Model.Restaurant.Price.Name</td>
+            </tr>
+            <tr>
+                <td>Cuisine:</td>
+                <td>@Model.Restaurant.Cuisine.Name</td>
+            </tr>
+        </table>
+        <h3>Make a Reservation</h3>
+
+        <form method="get" asp-action="Details">
+            <input type="hidden" name="id" value="@Model.Restaurant.Id" />
+
+            <div class="form-group mb-2">
+                <label for="date">Select Date:</label>
+                <input type="date" name="date"
+                       class="form-control"
+                       value="@ViewBag.SelectedDate.ToString("yyyy-MM-dd")"
+                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       onchange="this.form.submit()" />
+            </div>
+        </form>
+
+        @if (ViewBag.AvailableSlots != null)
+        {
+            <form method="post" asp-action="Add", asp-controller="Cart">
+                <input type="hidden" name="RestaurantId" value="@Model.Restaurant.Id" />
+                <input type="hidden" name="Date" value="@ViewBag.SelectedDate.ToString("yyyy-MM-dd")"  />
+
+                <div class="form-group mb-2">
+                    <label for="TimeSlot">Available Time Slots:</label>
+                    <select name="TimeSlot" class="form-control" required>
+                        @foreach (var slot in (List<string>)ViewBag.AvailableSlots)
+                        {
+                            <option value="@slot">@slot</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="PartySize">Number of People:</label>
+                    <input type="number" name="PartySize" class="form-control" min="1" required />
+                </div>
+
+                <button type="submit" name="id" value="@Model.Restaurant.Id" class="btn btn-primary">Hold Table</button>
+                <a asp-action="List" asp-controller="Restaurant" asp-route-ActiveMetropolis="@Model.ActiveMetropolis"
+                   asp-route-ActivePriceRange="@Model.ActivePriceRange" asp-route-ActiveCuisine="@Model.ActiveCuisine"
+                   class="btn btn-secondary ms-2">Cancel</a>
+
+            </form>
+        }
+    </div>
+</div>

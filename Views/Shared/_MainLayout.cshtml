@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OpenTable.Models;
+@using OpenTable.Models.DomainModels
+@using OpenTable.Models.ExtensionMethods
+@inject SignInManager<User> signInManager
+@{
+    Layout = "_Layout";
+
+    string controller =
+        ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string action =
+        ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+}
+@if (TempData["Message"] != null)
+{
+<div class="alert alert-success text-center mt-2">
+    @TempData["Message"]
+</div>
+}@if (TempData["ErrorMessage"] != null)
+{
+<div class="alert alert-danger text-center mt-2">
+    @TempData["ErrorMessage"]
+</div>
+}
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <div class="container-fluid d-flex align-items-center">
+                <a class="navbar-brand" href="/">
+                    <img src="/images/logo.png" alt="OpenTable" height="60">
+                </a>
+
+                <div class="dropdown ms-3">
+                    <button class="btn btn-gray dropdown-toggle text-dark fs-5 fw-bold" type="button" id="metroDropdown" data-bs-toggle="dropdown">
+                        Metro
+                    </button>
+                    <ul class="dropdown-menu">
+                        @{
+                            var metros = new List<string> { "Atlanta", "Boston", "Charlotte", "Chicago", "Houston", "Los Angeles", "Miami", "New York", "Phoenix", "San Francisco" };
+                            foreach (var metro in metros.OrderBy(m => m))
+                            {
+                                <li><a class="dropdown-item" href="#">@metro</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <nav class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link d-flex align-items-center gap-1 text-dark fs-5 fw-bold"
+                       asp-action="Index" asp-controller="Cart">
+                        <span class="fas fa-shopping-cart"></span>
+                        <span>Cart</span>
+                        @{
+                            var session = new ReservationSession(Context.Session);
+                            int? count = session.GetCartCount();
+                            <span class="badge bg-light text-dark">@count</span>
+                        }
+                    </a>
+
+                    <a class="nav-link text-dark fs-5 fw-bold"
+                       asp-controller="Home" asp-action="Mobile">Mobile</a>
+                    <a class="nav-link text-dark fs-5 fw-bold"
+                       asp-controller="Home" asp-action="FAQs">FAQs</a>
+                    <a class="nav-link text-dark fs-5 fw-bold"
+                       asp-action="Register" asp-controller="Register">Register</a>
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <span class="text-danger">@User.Identity?.Name</span>
+                        <form method="post" asp-action="LogOut" asp-controller="Account"
+                              asp-area="">
+                            <a class="nav-link text-dark fs-5 fw-bold">
+                                <input type="submit" value="Log Out" />
+                            </a>
+                        </form>
+
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark fs-5 fw-bold" asp-action="Login" asp-controller="Account"
+                           asp-area="">LogIn</a>
+                    }
+                    <a class="nav-link text-dark fs-5 fw-bold"
+                       asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a>
+                </div>
+            </nav>
+        </div>
+    </nav>
+
+</header>
+<div class="container pt-5">
+    <main>
+        @RenderBody()
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    </main>
+</div>
+
+@RenderSection("Scripts", required: false) 

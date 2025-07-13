@@ -1,0 +1,90 @@
+@model IEnumerable<OpenTable.Models.DomainModels.Restaurant>
+@{
+    ViewData["Title"] = "Restaurants";
+}
+<a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-link text-muted small"> ← Back to Admin Menu </a>
+
+<h2>Manage Restaurants</h2>
+
+<p><a asp-action="Add" class="btn btn-primary">Add New Restaurant</a></p>
+
+<div class="row">
+    <div class="col-md-3">
+        <form asp-action="Filter" method="post">
+            <div class="mb-3">
+                <label class="form-label">Metropolis:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Metropolises,
+                        "Id", "Name", ViewBag.Filters.MetropolisId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price Range:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Prices,
+                        "PriceId", "Name", ViewBag.Filters.PriceId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cuisine:</label>
+                <select name="filter" class="form-select"
+                        asp-items="@(new SelectList(ViewBag.Cuisines,
+                        "CuisineId", "Name", ViewBag.Filters.CuisineId))">
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" asp-route-id="" class="btn btn-primary">Clear</a>
+        </form>
+    </div>
+
+<div class="col-md-9">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Metropolis</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Price</th>
+                <th>Cuisine</th>
+                <th>Open Hours</th>
+                <th>Logo</th> 
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (OpenTable.Models.DomainModels.Restaurant restaurant in Model)
+                {
+            <tr>
+                <td>@restaurant.Name</td>
+                <td>@restaurant.Metropolis?.Name</td>
+                <td>@restaurant.Address</td>
+                <td>@restaurant.Phone</td>
+                <td>@restaurant.Price.Name</td>
+                <td>@restaurant.Cuisine.Name</td>
+                <td>@restaurant.OpenHours</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(restaurant.LogoPath))
+                    {
+                    <img src="~/@restaurant.LogoPath?v=@DateTime.Now.Ticks" alt="Logo" width="50" />
+                    }
+                    else
+                    {
+                    <span>No Logo</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@restaurant.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@restaurant.Id">Delete</a>
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@* <a asp-action="Index" asp-route-metroRegion="all" asp-route-priceRange="all" asp-route-cuisineStyle="all" class="btn btn-secondary">Clear Filters</a>  *@

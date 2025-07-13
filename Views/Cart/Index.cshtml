@@ -1,0 +1,44 @@
+﻿@model OpenTable.Models.ViewModels.RestaurantsViewModel
+
+<h2>My Reservation Cart</h2>
+@if (Model.Reservations.Count == 0)
+{
+    <p>No reservations in your cart.</p>
+    
+}
+else
+{
+<table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Restaurant</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Party Size</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (OpenTable.Models.DomainModels.Reservation r in Model.Reservations)
+            {
+            <tr>
+                <td>@r.Restaurant?.Name</td>
+                <td>@r.Date.ToString("yyyy-MM-dd")</td>
+                <td>@r.TimeSlot</td>
+                <td>@r.PartySize</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@r.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <div class="row mb-4">
+        <div class="col d-flex justify-content-end gap-2">
+            <a asp-action="Confirm" asp-controller="Reservation" class="btn btn-success">
+                Confirm Reservation
+            </a>
+            <a asp-action="Index" asp-controller="Restaurant" class="btn btn-secondary">Home</a>
+        </div>
+    </div>
+}

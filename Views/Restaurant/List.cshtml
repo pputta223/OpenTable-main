@@ -1,0 +1,78 @@
+@using OpenTable.Models.ViewModels
+@using OpenTable.Models.Grid
+@using OpenTable.Models.Utils
+@using OpenTable.Models.ExtensionMethods
+@using OpenTable.Models.DomainModels
+@model OpenTable.Models.ViewModels.RestaurantsViewModel
+@{
+    ViewData["Title"] = " | Restaurant List";
+
+    RestaurantGridData current = Model.CurrentRoute;
+    GridData routes = Model.CurrentRoute.Clone();
+}
+
+<table class="table table-bordered table-striped table-sm">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>
+                @{
+                    routes.SetSortAndDirection("Name", current);
+
+                }
+                <a asp-action="List"
+                   asp-all-route-data="@routes.ToDictionary()"
+                   class="text-danger text-decoration-underline">RestaurantName</a>
+            </th>
+            <th>
+                @{
+                    routes.SetSortAndDirection("Metropolis", current);
+                }
+                <a asp-action="List"
+                   asp-all-route-data="@routes.ToDictionary()"
+                   class="text-danger text-decoration-underline">Metropolis</a>
+            </th>
+            <th>
+                @{
+                    routes.SetSortAndDirection("Price", current);
+                }
+                <a asp-action="List"
+                   asp-all-route-data="@routes.ToDictionary()"
+                   class="text-danger text-decoration-underline">PriceRange</a>
+            </th>
+            <th>Open Hours</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Restaurant restaurant in Model.Restaurantss)
+        {
+            <tr>
+                <td>@restaurant.Name</td>
+                <td>@restaurant.Metropolis.Name</td>
+                <td>@restaurant.Price.Name</td>
+                <td>@restaurant.OpenHours</td>
+                <td>@restaurant.LogoPath</td>
+                <td class="action-links">
+                    <a asp-controller="Restaurant" asp-action="Details"
+                       asp-route-id="@restaurant.Id"
+                       asp-route-slug="@restaurant.Slug" class="btn btn-secondary btn-sm">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@* paging links *@
+@{
+    @* Reset to the current route values. This is necessary to clear the changes made while 
+        creating the sorting links above. *@
+    routes = current.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+        <a asp-action="List" asp-all-route-data="@routes.ToDictionary()"
+           class="btn btn-outline-primary @active">@i</a>
+    }
+}
