@@ -51,8 +51,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Set Azure dynamic port binding
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-app.Urls.Add($"http://*:{port}");
+//var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+//app.Urls.Add($"http://*:{port}");
 
 app.MapStaticAssets();
 
